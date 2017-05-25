@@ -1,0 +1,154 @@
+﻿@model AspNetCoreCms.Models.SitePage
+@{
+    ViewData["Title"] = Model?.Heading;
+}
+<div class="row content-section">
+    <div class="content-controls">
+        <div class="btn btn-success btn-xs" onclick="addCarousel(2)">Add Carousel</div>
+    </div>
+    @if (Model != null && Model.Carousels.Any())
+    {
+        int carouselIndex = 0;
+        foreach (var carousel in Model.Carousels.Where(x => x.SectionId == 2))
+        {
+            <div id="myCarousel-@carouselIndex" class="carousel slide content-entity" data-ride="carousel" data-interval="6000">
+                <div class="entity-controls">
+                    <div class="btn btn-danger btn-xs" onclick="deleteContent('@nameof(carousel).@carousel.Id')">Delete Carousel</div>
+                    <div class="btn btn-success btn-xs" onclick="addCarouselSlide(@carousel.Id)">Add Slide</div>
+                </div>
+                <ol class="carousel-indicators">
+                    @{int i = 0;}
+                    @foreach (var slide in carousel.Slides)
+                    {
+                        <li data-target="#myCarousel-@carouselIndex" data-slide-to="@i" class="@slide.CssClass"></li>
+                        ++i;
+                    }
+                </ol>
+                <div class="carousel-inner" role="listbox">
+                    @foreach (var slide in carousel.Slides)
+                    {
+                        <div class="item @slide.CssClass content-entity">
+                            @if (!string.IsNullOrWhiteSpace(slide.ImageUrl))
+                        {
+                                <img id="@nameof(slide).@nameof(slide.ImageUrl).@slide.Id" src="@slide.ImageUrl" alt="Microsoft Azure" class="cke_editable_inline img-responsive" />
+                            }
+                            else
+                            {
+                                <div contenteditable="true" id="@nameof(slide).@nameof(slide.Content).@slide.Id" class="cke_editable_inline text-center">@Html.Raw(slide.Content)</div>
+                            }
+                            <div contenteditable="true" id="@nameof(slide).@nameof(slide.Caption).@slide.Id" class="cke_editable_inline carousel-caption" role="option">
+                                @Html.Raw(slide.Caption)
+                            </div>
+                            <div class="entity-controls">
+                                <div class="btn btn-danger btn-xs" onclick="deleteContent('@nameof(slide).@slide.Id')">Delete Slide</div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <a class="left carousel-control" href="#myCarousel-@carouselIndex" role="button" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="right carousel-control" href="#myCarousel-@carouselIndex" role="button" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+            ++carouselIndex;
+        }
+    }
+</div>
+
+<div class="row content-section">
+    <div class="content-controls">
+        <div class="btn btn-success btn-xs" onclick="addArticle(3)">Add Main Content</div>
+    </div>
+    @if (Model != null && Model.Articles.Any(x => x.SectionId == 3))
+    {
+        @foreach (var article in Model.Articles.Where(x => x.SectionId == 3))
+        {
+            <div class="col-md-12 content-entity">
+                <div class="entity-controls">
+                    <div class="btn btn-danger btn-xs" onclick="deleteContent('@nameof(article).@article.Id')">Delete Article</div>
+                </div>
+                <h2 contenteditable="true" id="@nameof(article).@nameof(article.Title).@article.Id" class="cke_editable_inline">@article.Title</h2>
+                <div contenteditable="true" id="@nameof(article).@nameof(article.Body).@article.Id" class="cke_editable_inline">@Html.Raw(article.Body)</div>
+            </div>
+
+        }
+    }
+</div>
+
+<div class="row content-section">
+    <div class="content-controls">
+        <div class="btn btn-success btn-xs" onclick="addArticle(4)">Add Column Content</div>
+    </div>
+    @if (Model != null && Model.Articles.Any(x => x.SectionId == 4))
+    {
+        @foreach (var article in Model.Articles.Where(x => x.SectionId == 4))
+        {
+            <div class="col-md-4 content-entity">
+                <div class="entity-controls">
+                    <div class="btn btn-danger btn-xs" onclick="deleteContent('@nameof(article).@article.Id')">Delete Article</div>
+                </div>
+                <h2 contenteditable="true" id="@nameof(article).@nameof(article.Title).@article.Id" class="cke_editable_inline">@article.Title</h2>
+                <div contenteditable="true" id="@nameof(article).@nameof(article.Body).@article.Id" class="cke_editable_inline">@Html.Raw(article.Body)</div>
+            </div>
+
+        }
+    }
+</div>
+
+@section scripts{
+    <script src="~/lib/ckeditor/ckeditor.js"></script>
+    <script src="~/lib/ckeditor/adapters/jquery.js"></script>
+
+    <script>
+        function addArticle(section) {
+            $.post('@Url.Content("~/Cms/AddArticle")', {
+                site: @Model.SiteId,
+                page: @Model?.Id,
+                section: section
+            }, function (results) {
+                location.reload();
+            })
+        }
+
+        function addCarousel(section) {
+            $.post('@Url.Content("~/Cms/AddCarousel")', {
+                site:  @Model.SiteId,
+                page: @Model?.Id,
+                section: section
+            }, function (results) {
+                location.reload();
+            })
+        }
+
+        function addCarouselSlide(carouselId) {
+            $.post('@Url.Content("~/Cms/AddCarouselSlide")', {
+                carouselId: carouselId
+            }, function (results) {
+                location.reload();
+            })
+        }
+
+        function deleteContent(id) {
+            $.post('@Url.Content("~/Cms/Delete")', {
+                id: id
+            }, function (results) {
+                location.reload();
+            })
+        }
+
+        $(function () {
+            CKEDITOR.disableAutoInline = true;
+            $('.cke_editable_inline').ckeditor(function () {
+                this.on('blur', function () {
+                    $.post('@Url.Content("~/Cms/Save")', { id: this.name, data: this.getData() }, function (results) {
+                        console.log(results);
+                    })
+                });
+            });
+        });
+    </script>
+}

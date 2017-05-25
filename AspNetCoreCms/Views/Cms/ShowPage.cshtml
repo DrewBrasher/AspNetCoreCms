@@ -1,0 +1,77 @@
+﻿@model AspNetCoreCms.Models.SitePage
+@{
+    ViewData["Title"] = Model?.Heading;
+}
+
+@if (Model != null && Model.Carousels.Any())
+{
+    int carouselIndex = 0;
+    foreach (var carousel in Model.Carousels.Where(x => x.SectionId == 2))
+    {
+        <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">
+            <ol class="carousel-indicators">
+                @{int i = 0;}
+                @foreach (var slide in carousel.Slides)
+                {
+                    <li data-target="#myCarousel" data-slide-to="@i" class="@slide.CssClass"></li>
+                    ++i;
+                }
+            </ol>
+            <div class="carousel-inner" role="listbox">
+                @foreach (var slide in carousel.Slides)
+                {
+                    <div class="item @slide.CssClass">
+                        @if (!string.IsNullOrWhiteSpace(slide.ImageUrl))
+                        {
+                            <img id="@nameof(slide).@nameof(slide.ImageUrl).@slide.Id" src="@slide.ImageUrl" alt="Microsoft Azure" class="img-responsive" />
+                        }
+                        else
+                        {
+                            <div id="@nameof(slide).@nameof(slide.Content).@slide.Id" class="text-center" style="min-height: 400px;">@Html.Raw(slide.Content)</div>
+                        }
+                        <div id="@nameof(slide).@nameof(slide.Caption).@slide.Id" class="carousel-caption" role="option">
+                            @Html.Raw(slide.Caption)
+                        </div>
+                    </div>
+                }
+            </div>
+            <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+        ++carouselIndex;
+    }
+}
+
+@if (Model != null && Model.Articles.Any(x => x.SectionId == 3))
+{
+    <div class="row">
+        @foreach (var article in Model.Articles.Where(x => x.SectionId == 3))
+        {
+            <div class="col-md-12">
+                <h2 id="@nameof(article).@nameof(article.Title).@article.Id">@article.Title</h2>
+                <div id="@nameof(article).@nameof(article.Body).@article.Id">@Html.Raw(article.Body)</div>
+            </div>
+
+        }
+    </div>
+}
+
+@if (Model != null && Model.Articles.Any(x => x.SectionId == 4))
+{
+    <div class="row">
+        @foreach (var article in Model.Articles.Where(x => x.SectionId == 4))
+        {
+            <div class="col-md-4">
+                <h2 id="@nameof(article).@nameof(article.Title).@article.Id">@article.Title</h2>
+                <div id="@nameof(article).@nameof(article.Body).@article.Id">@Html.Raw(article.Body)</div>
+            </div>
+
+        }
+    </div>
+}
