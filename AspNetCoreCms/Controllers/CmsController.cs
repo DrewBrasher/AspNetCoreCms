@@ -216,12 +216,15 @@ namespace AspNetCoreCms.Controllers
 
             return Json(new { succss = true });
         }
-
-        [AllowAnonymous]
-        public async Task<IActionResult> AddClaim()
+        
+        // TODO: Replace this with some kind of user management UI
+        public async Task<IActionResult> AddClaim(string email, string claimType, string claimValue)
         {
-            var user = await _userManager.FindByEmailAsync("abrasher79@gmail.com");
-            await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("SiteAdmin", "true"));
+            var user = await _userManager.FindByEmailAsync(email);
+            if(user != null)
+            {
+                await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim(claimType, claimValue));
+            }
             return RedirectToAction("Index");
         }
 

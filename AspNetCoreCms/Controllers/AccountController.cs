@@ -122,6 +122,14 @@ namespace AspNetCoreCms.Controllers
                     //var callbackUrl = Url.Action(nameof(ConfirmEmail), "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
                     //await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
                     //    $"Please confirm your account by clicking this link: <a href='{callbackUrl}'>link</a>");
+
+                    // TODO: Figure out a better way to setup the first admin
+                    // Make the first user to register a Site Admin 
+                    if (_userManager.Users.Count() == 1)
+                    {
+                        await _userManager.AddClaimAsync(user, new Claim("SiteAdmin", "True"));
+                    }
+
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation(3, "User created a new account with password.");
                     return RedirectToLocal(returnUrl);
