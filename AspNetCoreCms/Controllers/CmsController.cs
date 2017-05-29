@@ -83,7 +83,7 @@ namespace AspNetCoreCms.Controllers
 
             if (_signInManager.IsSignedIn(User) && await _authorizationService.AuthorizeAsync(User, "SiteAdmin"))
             {
-                return model == null ? View("AddPage"): View("EditPAge", model);
+                return model == null ? View("AddPage", new SitePage { Url = page }): View("EditPAge", model);
             }
             else
             {

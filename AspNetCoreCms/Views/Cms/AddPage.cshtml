@@ -6,15 +6,19 @@
 <h2>@ViewData["Title"].</h2>
 
 <form method="post" asp-action="AddPage">
-    <div class="form-group">
-        <label asp-for="Url"></label>
-        <input asp-for="Url" class="form-control" />
-        <span asp-validation-for="Url"></span>
+    <div class="form-group form-inline row">
+        <label class="col-md-2 text-right" asp-for="Url">Page Url:</label>
+        <div class="col-md-4">
+            @Context.Request.Host/<input asp-for="Url" class="form-control" />
+            <span asp-validation-for="Url"></span>
+        </div>
     </div>
-    <div class="form-group">
-        <label asp-for="Heading"></label>
-        <input asp-for="Heading" class="form-control" />
-        <span asp-validation-for="Heading"></span>
+    <div class="form-group form-inline row">
+        <label class="col-md-2 text-right" asp-for="Heading">Page Title:</label>
+        <div class="col-md-4">
+            <input asp-for="Heading" class="form-control" />
+            <span asp-validation-for="Heading"></span>
+        </div>
     </div>
     <button type="submit" class="btn btn-default">Create Page</button>
 </form>
