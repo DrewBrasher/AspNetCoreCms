@@ -27,6 +27,7 @@ namespace AspNetCoreCms.Controllers
         private ICarouselSlideRepository carouselSlideRepository;
         private IMenuRepository menuRepository;
         private IMenuItemRepository menuItemRepository;
+        private Site site;
 
         public CmsController(
             UserManager<ApplicationUser> userManager,
@@ -41,7 +42,8 @@ namespace AspNetCoreCms.Controllers
             ICarouselRepository carouselRepository,
             ICarouselSlideRepository carouselSlideRepository,
             IMenuRepository menuRepository,
-            IMenuItemRepository menuItemRepository
+            IMenuItemRepository menuItemRepository,
+            Site site
             )
         {
             _userManager = userManager;
@@ -57,6 +59,7 @@ namespace AspNetCoreCms.Controllers
             this.carouselSlideRepository = carouselSlideRepository;
             this.menuRepository = menuRepository;
             this.menuItemRepository = menuItemRepository;
+            this.site = site;
         }
 
         [AllowAnonymous]
@@ -92,19 +95,44 @@ namespace AspNetCoreCms.Controllers
             }
         }
 
+        public IActionResult ManageSites()
+        {
+            var model = siteRepository.List().ToList();
+            return View(model);
+        }
+
+        public IActionResult SiteSettings(int? id = null)
+        {
+            var model = id != null ? siteRepository.GetById(id.Value) : new Site();
+            return View(model);
+        }
+        
+        [HttpPost]
+        public IActionResult SiteSettings(Site formData)
+        {
+            if(formData.Id < 1)
+            {
+                siteRepository.Insert(formData);
+            }
+            else
+            {
+                var site = siteRepository.GetById(formData.Id);
+                site.DomainName = formData.DomainName;
+                site.Title = formData.Title;
+                site.Theme = formData.Theme;
+                siteRepository.Update(site);
+            }
+
+            return RedirectToAction(nameof(ManageSites));
+        }
+
         public IActionResult AddPage(SitePage formData)
         {
             if(formData == null)
             {
                 return View();
             }
-
-            // TODO:  Decide if we should support multiple site in one application.
-            if (!siteRepository.List().Any())
-            {
-                siteRepository.Insert(new Site());
-            }
-            var site = siteRepository.List().FirstOrDefault();
+            
             formData.SiteId = site.Id;
             sitePageRepository.Insert(formData);
             return Redirect($"/{formData.Url}");

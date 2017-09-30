@@ -142,6 +142,7 @@
 
         $(function () {
             CKEDITOR.disableAutoInline = true;
+            CKEDITOR.config.plugins += ",sourcedialog";
             $('.cke_editable_inline').ckeditor(function () {
                 this.on('blur', function () {
                     $.post('@Url.Content("~/Cms/Save")', { id: this.name, data: this.getData() }, function (results) {

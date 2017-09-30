@@ -9,8 +9,10 @@ namespace AspNetCoreCms.Repositories
 {
     public class SitePageRepository : EntityFrameworkBaseRepository<SitePage>, ISitePageRepository
     {
-        public SitePageRepository(ILogger<SitePage> log, DbContext dbContext) : base(log, dbContext)
+        private Site site;
+        public SitePageRepository(ILogger<SitePage> log, DbContext dbContext, Site site) : base(log, dbContext)
         {
+            this.site = site;
         }
 
         public SitePage GetByUrl(string url)
@@ -21,7 +23,7 @@ namespace AspNetCoreCms.Repositories
                 .Include(x => x.Branding)
                 .Include(x => x.Carousels).ThenInclude(y => y.Slides)
                 .Include(x => x.Menus).ThenInclude(y => y.MenuItems)
-                .SingleOrDefault(x => x.Url == url);
+                .SingleOrDefault(x => x.Url == url && x.SiteId == site.Id);
         }
     }
 }

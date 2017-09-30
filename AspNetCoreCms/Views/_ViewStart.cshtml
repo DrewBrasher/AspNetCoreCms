@@ -1,3 +1,6 @@
-﻿@{
-    Layout = "_Layout";
+﻿@inject AspNetCoreCms.Models.Site site
+
+@{
+    var theme = string.IsNullOrWhiteSpace(site?.Theme) ? "Default" : site?.Theme;
+    Layout = $"_Layout_{theme}";
 }

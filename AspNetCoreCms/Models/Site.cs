@@ -8,6 +8,7 @@ namespace AspNetCoreCms.Models
         public string Url { get; set; }
         public string DomainName { get; set; }
         public List<SitePage> Pages { get; set; }
-
+        public string Title { get; set; }
+        public string Theme { get; set; }
     }
 }

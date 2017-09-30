@@ -1,0 +1,15 @@
+﻿@model List<AspNetCoreCms.Models.Site>
+@{
+    ViewData["Title"] = "Manage Sites";
+}
+
+<h2>@ViewData["Title"].</h2>
+
+<a asp-action="SiteSettings" class="btn btn-primary">Add Site</a>
+
+<ul>
+    @foreach(var site in Model)
+    {
+        <li><a asp-action="SiteSettings" asp-route-id="@site.Id">@site.Title</a></li>
+    }
+</ul>

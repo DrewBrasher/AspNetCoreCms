@@ -91,7 +91,7 @@ CKEDITOR.stylesSet.add( 'default', [
 		name: 'Styled Image (right)',
 		element: 'img',
 		attributes: { 'class': 'right' }
-	},
+    },
 
 	{
 		name: 'Compact Table',
@@ -113,7 +113,14 @@ CKEDITOR.stylesSet.add( 'default', [
 	/* Widget styles */
 
 	{ name: 'Clean Image', type: 'widget', widget: 'image', attributes: { 'class': 'image-clean' } },
-	{ name: 'Grayscale Image', type: 'widget', widget: 'image', attributes: { 'class': 'image-grayscale' } },
+    { name: 'Grayscale Image', type: 'widget', widget: 'image', attributes: { 'class': 'image-grayscale' } },
+
+    {
+        name: 'Responsive Image',
+        type: 'widget',
+        widget: 'image',
+        attributes: { 'class': 'img img-responsive' }
+    },
 
 	{ name: 'Featured Snippet', type: 'widget', widget: 'codeSnippet', attributes: { 'class': 'code-featured' } },
 

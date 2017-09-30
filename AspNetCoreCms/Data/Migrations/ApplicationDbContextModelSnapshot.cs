@@ -235,6 +235,10 @@ namespace AspNetCoreCms.Data.Migrations
 
                     b.Property<string>("DomainName");
 
+                    b.Property<string>("Theme");
+
+                    b.Property<string>("Title");
+
                     b.Property<DateTime>("UpdatedAt");
 
                     b.Property<string>("Url");

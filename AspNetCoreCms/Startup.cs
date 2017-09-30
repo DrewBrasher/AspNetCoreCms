@@ -50,6 +50,8 @@ namespace AspNetCoreCms
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddMultitenancy<Site, AppTenantResolver>();
+
             services.AddMvc();
 
             services.AddAuthorization(options =>
@@ -91,6 +93,8 @@ namespace AspNetCoreCms
             }
 
             app.UseStaticFiles();
+
+            app.UseMultitenancy<Site>();
 
             app.UseIdentity();
 
