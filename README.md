@@ -26,3 +26,10 @@ To add a new page, just navigate to the Url you want to create.  If you are sign
 ## Adding Content
 If you visit a page while logged in as a Site Admin you will see buttons to add new content.  When you click to add the content it will be created with some default text.  You can click the text to edit it.  Changes are saved on blur.
  
+## Multitenancy
+Thanks to ([SaasKit](https://github.com/saaskit/saaskit/wiki/SaasKit-Multitenancy)), AspNetCoreCms now supports multiple domains with one code base.  To manage your sites:
+
+1. Log in as a Site Admin
+2. Go to {yoururl}/Cms/ManageSites
+3. Add or edit you domain names
+4. If you don't want to use the default theme, you can add themes by adding more layout cshtml files to the Views/Shared/ folder with this naming convention: _Layout_{yourthemename}.
