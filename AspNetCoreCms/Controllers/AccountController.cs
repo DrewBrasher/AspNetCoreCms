@@ -24,6 +24,7 @@ namespace AspNetCoreCms.Controllers
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
         private readonly string _externalCookieScheme;
+        private Site _site;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
@@ -31,7 +32,8 @@ namespace AspNetCoreCms.Controllers
             IOptions<IdentityCookieOptions> identityCookieOptions,
             IEmailSender emailSender,
             ISmsSender smsSender,
-            ILoggerFactory loggerFactory)
+            ILoggerFactory loggerFactory, 
+            Site site)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -39,6 +41,7 @@ namespace AspNetCoreCms.Controllers
             _emailSender = emailSender;
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
+            _site = site;
         }
 
         //
@@ -129,6 +132,8 @@ namespace AspNetCoreCms.Controllers
                     {
                         await _userManager.AddClaimAsync(user, new Claim("SiteAdmin", "True"));
                     }
+
+                    await _userManager.AddClaimAsync(user, new Claim("SiteAccess", _site.Id.ToString()));
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation(3, "User created a new account with password.");
