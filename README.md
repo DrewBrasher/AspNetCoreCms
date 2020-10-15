@@ -1,6 +1,9 @@
+
+## I am no longer working on this project.  I've decided to use and contribute to [OrchardCore](https://github.com/OrchardCMS/OrchardCore) instead of building my own CMS.
+
 # AspNetCoreCms
 Open Source Content Management System (CMS) Built in ASP.NET Core
-### This project is in the very early stages of development.  Suggestions and contributions are welcome.
+### ~~This project is in the very early stages of development.  Suggestions and contributions are welcome.~~
  
 ## Goals
 - Make this a Visual Studio template for starting a new CMS site.
